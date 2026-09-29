@@ -8,7 +8,7 @@
     <PackageId>FsForge</PackageId>
     <Title>FsForge</Title>
     <Description>Provider-agnostic git and pull request write-back for F#: clone, worktree, commit, push and fork mechanics behind a pluggable auth abstraction, with a GitHub (gh CLI) forge client.</Description>
-    <Version>0.1.0</Version>
+    <Version>0.0.0</Version>
     <Authors>Devon Burriss</Authors>
     <Copyright>Copyright © 2026 Devon Burriss</Copyright>
     <PackageProjectUrl>https://github.com/dburriss/fsforge</PackageProjectUrl>
