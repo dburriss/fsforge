@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>Forge</RootNamespace>
+    <Nullable>enable</Nullable>
+    <IsPackable>true</IsPackable>
+    <PackageId>FsForge</PackageId>
+    <Title>FsForge</Title>
+    <Description>Provider-agnostic git and pull request write-back for F#: clone, worktree, commit, push and fork mechanics behind a pluggable auth abstraction, with a GitHub (gh CLI) forge client.</Description>
+    <Version>0.1.0</Version>
+    <Authors>Devon Burriss</Authors>
+    <Copyright>Copyright © 2026 Devon Burriss</Copyright>
+    <PackageProjectUrl>https://github.com/dburriss/fsforge</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/dburriss/fsforge</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>fsharp git github pull-request forge</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageReleaseNotes>Initial release.</PackageReleaseNotes>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="README.md" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.fs" />
+    <Compile Include="Types.fs" />
+    <Compile Include="Process.fs" />
+    <Compile Include="GitOps.fs" />
+    <Compile Include="GitHub/GhForgeClient.fs" />
+  </ItemGroup>
+
+</Project>
