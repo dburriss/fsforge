@@ -1,3 +1,4 @@
+/// Child-process execution helper shared by the git and forge operations.
 module Forge.Process
 
 open System.Diagnostics

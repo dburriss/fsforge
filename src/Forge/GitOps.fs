@@ -1,3 +1,4 @@
+/// Git mechanics (clone, worktree, commit, push) implemented by shelling out to the `git` CLI.
 module Forge.GitOps
 
 open System
@@ -108,8 +109,8 @@ let commitAll (worktreeDir: string) (message: string) : Async<Result<unit, strin
     }
 
 /// Push the worktree's current HEAD to `remoteBranch` on `remoteName`,
-/// force-pushing unconditionally. The branch is orcai-owned and every run
-/// starts from a fresh clone with no local remote-tracking ref for it, so
+/// force-pushing unconditionally. The branch is assumed to be owned by the
+/// caller and every run starts from a fresh clone with no local remote-tracking ref for it, so
 /// `--force-with-lease` would reject the push as "stale info" as soon as any
 /// prior run had already pushed to that branch — there is nothing to compare
 /// the lease against. Plain `--force` is correct here precisely because we

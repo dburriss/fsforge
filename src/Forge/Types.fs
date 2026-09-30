@@ -4,6 +4,7 @@ namespace Forge
 /// the credential-helper approach so a specific forge's auth mechanism plugs in
 /// without git-mechanics code depending on that forge.
 type GitAuth =
+    /// No authentication; rely on whatever git is already configured with.
     | NoAuth
     /// `helperCommand` is passed as `git -c credential.helper=<helperCommand>`;
     /// `env` entries are set on the child process only (e.g. a token env var the

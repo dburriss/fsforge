@@ -1,3 +1,4 @@
+/// GitHub support backed by the `gh` CLI: git auth and an `IForgeClient` implementation.
 module Forge.GitHub
 
 open System.IO
@@ -5,7 +6,7 @@ open Forge
 open Forge.Process
 
 /// Env entries to inject a resolved gh token for the credential helper, or none
-/// when the token is empty (e.g. a Local provider).
+/// when the token is empty (i.e. rely on ambient `gh` auth).
 let internal tokenEnv (token: string) = if token = "" then [] else [ "GH_TOKEN", token ]
 
 /// Pure argument builder for `gh pr create`, kept separate from `runProcess` so
@@ -18,7 +19,8 @@ let internal buildPrCreateArgs (repo: string) (head: string) (title: string) (bo
 let githubAuth (token: string) : GitAuth =
     CredentialHelper("!gh auth git-credential", tokenEnv token)
 
-/// `IForgeClient` implementation backed by the `gh` CLI.
+/// `IForgeClient` implementation backed by the `gh` CLI. `token` is passed to `gh`
+/// as `GH_TOKEN`; pass an empty string to use the ambient `gh` authentication.
 type GhForgeClient(token: string) =
     interface IForgeClient with
         member _.Fork(repo: string) : Async<Result<string, string>> =
