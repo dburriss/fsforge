@@ -77,9 +77,13 @@ let cleanupWorktree (basePath: string) (worktreePath: string) : unit =
         with _ -> ()
         try if Directory.Exists(worktreePath) then Directory.Delete(worktreePath, true) with _ -> ()
 
-/// Remove an entire repo directory (base clone + all worktrees).
-let cleanupAll (repoDir: string) : unit =
-    try if Directory.Exists(repoDir) then Directory.Delete(repoDir, true) with _ -> ()
+/// Remove an entire repo directory (base clone + all worktrees). Succeeds if the
+/// directory is already absent; returns `Error` if it could not be deleted.
+let cleanupAll (repoDir: string) : Result<unit, string> =
+    try
+        if Directory.Exists(repoDir) then Directory.Delete(repoDir, true)
+        Ok ()
+    with ex -> Error $"Failed to remove {repoDir}: {ex.Message}"
 
 /// Stage all changes and commit in the given worktree directory.
 /// Injects a fallback git identity for CI runners that have none configured.
