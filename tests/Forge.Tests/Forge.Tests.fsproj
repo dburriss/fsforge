@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="ProcessTests.fs" />
     <Compile Include="GitOpsTests.fs" />
     <Compile Include="GhForgeClientTests.fs" />
   </ItemGroup>

@@ -17,7 +17,10 @@ let runProcess (executable: string) (args: string list) (env: (string * string) 
         psi.UseShellExecute        <- false
         for arg in args do psi.ArgumentList.Add(arg)
         for (k, v) in env do psi.Environment[k] <- v
-        use proc = Process.Start(psi)
+        use proc =
+            match Process.Start(psi) with
+            | null -> failwith $"Failed to start process '{executable}'"
+            | p -> p
         // Read stdout and stderr concurrently before waiting for exit to avoid
         // deadlock when both output streams fill their OS buffers simultaneously.
         let stdoutTask = proc.StandardOutput.ReadToEndAsync()

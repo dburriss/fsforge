@@ -13,7 +13,7 @@ let private run (exe: string) (args: string list) (wd: string) =
     psi.RedirectStandardError  <- true
     psi.UseShellExecute        <- false
     for a in args do psi.ArgumentList.Add(a)
-    use p = Process.Start(psi)
+    use p = Process.Start(psi) |> Option.ofObj |> Option.get
     p.WaitForExit()
     p.ExitCode = 0
 
@@ -160,6 +160,39 @@ let ``lsRemoteHeads returns false when the branch does not exist on the remote``
         Assert.Equal(Ok false, result)
     finally
         try Directory.Delete(seedDir, true) with _ -> ()
+
+// ---------------------------------------------------------------------------
+// cleanupAll — failures must be surfaced, not swallowed
+// ---------------------------------------------------------------------------
+
+[<Fact>]
+let ``cleanupAll removes the directory and returns Ok`` () =
+    let dir = Path.Combine(Path.GetTempPath(), $"forge-cleanup-{System.Guid.NewGuid():N}")
+    Directory.CreateDirectory(Path.Combine(dir, "sub")) |> ignore
+    File.WriteAllText(Path.Combine(dir, "sub", "f.txt"), "x")
+
+    let result = cleanupAll dir
+
+    Assert.Equal(Ok (), result)
+    Assert.False(Directory.Exists dir)
+
+[<Fact>]
+let ``cleanupAll returns Error when the directory cannot be deleted`` () =
+    if System.OperatingSystem.IsWindows() then () else
+    let parent = Path.Combine(Path.GetTempPath(), $"forge-cleanup-ro-{System.Guid.NewGuid():N}")
+    let dir    = Path.Combine(parent, "repo")
+    Directory.CreateDirectory(dir) |> ignore
+    File.WriteAllText(Path.Combine(dir, "f.txt"), "x")
+    // Read-only directory: its entries cannot be removed.
+    File.SetUnixFileMode(dir, UnixFileMode.UserRead ||| UnixFileMode.UserExecute)
+    try
+        let result = cleanupAll dir
+        match result with
+        | Error _ -> ()
+        | Ok () -> Assert.Fail "expected Error when the directory cannot be deleted"
+    finally
+        File.SetUnixFileMode(dir, UnixFileMode.UserRead ||| UnixFileMode.UserWrite ||| UnixFileMode.UserExecute)
+        try Directory.Delete(parent, true) with _ -> ()
 
 // ---------------------------------------------------------------------------
 // runProcess — GH_TOKEN env injection, used by ensureClone/pushBranch/forkAndPush
