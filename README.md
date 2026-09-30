@@ -44,7 +44,8 @@ All operations return `Async<Result<_, string>>`; nothing throws for an expected
 
 ## Documentation
 
-See the [reference docs](docs/README.md) for every operation on the main modules and types.
+See the [reference docs](docs/README.md) for every operation on the main modules and types, and the [samples](samples/README.md) for runnable
+workflows (worktree, commit and push, fork and PR).
 
 ## License
 
