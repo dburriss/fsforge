@@ -22,8 +22,11 @@ let ensureClone (auth: GitAuth) (remoteUrl: string) (basePath: string) : Async<R
         else
             try
                 Directory.CreateDirectory(basePath) |> ignore
-                let parent  = Path.GetDirectoryName(basePath)
-                let dirName = Path.GetFileName(basePath)
+                let parent =
+                    match Path.GetDirectoryName(basePath) with
+                    | null -> failwith $"Cannot determine parent directory of '{basePath}'"
+                    | p -> p
+                let dirName = Path.GetFileName(basePath) |> Option.ofObj |> Option.defaultValue ""
                 let helperArgs, env = authArgs auth
                 let cloneArgs = helperArgs @ ["clone"; "--bare"; "--depth"; "1"; remoteUrl; dirName]
                 let! result = runProcess "git" cloneArgs env parent

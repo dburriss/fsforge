@@ -13,7 +13,7 @@ let private run (exe: string) (args: string list) (wd: string) =
     psi.RedirectStandardError  <- true
     psi.UseShellExecute        <- false
     for a in args do psi.ArgumentList.Add(a)
-    use p = Process.Start(psi)
+    use p = Process.Start(psi) |> Option.ofObj |> Option.get
     p.WaitForExit()
     p.ExitCode = 0
 
