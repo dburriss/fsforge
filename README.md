@@ -5,8 +5,25 @@ mechanics behind a pluggable auth abstraction, plus a GitHub implementation buil
 
 ## Install
 
+[![NuGet](https://img.shields.io/nuget/vpre/FsForge)](https://www.nuget.org/packages/FsForge/)
+
+Install from [NuGet](https://www.nuget.org/packages/FsForge/). Only prerelease versions are published so far, so
+pass `--prerelease`:
+
 ```sh
-dotnet add package FsForge
+dotnet add package FsForge --prerelease
+```
+
+Or reference it in your project file:
+
+```xml
+<PackageReference Include="FsForge" Version="0.0.1-beta1" />
+```
+
+In an F# script (`.fsx`):
+
+```fsharp
+#r "nuget: FsForge, 0.0.1-beta1"
 ```
 
 Requires `git` (and `gh` when using the GitHub client) on `PATH`. Targets `net10.0`.
