@@ -42,6 +42,10 @@ async {
 
 All operations return `Async<Result<_, string>>`; nothing throws for an expected git/`gh` failure.
 
+## Documentation
+
+See the [reference docs](docs/README.md) for every operation on the main modules and types.
+
 ## License
 
 MIT
