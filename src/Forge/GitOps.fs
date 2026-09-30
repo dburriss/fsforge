@@ -98,10 +98,10 @@ let commitAll (worktreeDir: string) (message: string) : Async<Result<unit, strin
             | Error _ ->
                 // Provide a fallback identity for CI runners with no git config.
                 let identityEnv =
-                    [ "GIT_AUTHOR_NAME",     "orcai"
-                      "GIT_AUTHOR_EMAIL",    "orcai@users.noreply.github.com"
-                      "GIT_COMMITTER_NAME",  "orcai"
-                      "GIT_COMMITTER_EMAIL", "orcai@users.noreply.github.com" ]
+                    [ "GIT_AUTHOR_NAME",     "fsforge"
+                      "GIT_AUTHOR_EMAIL",    "fsforge@users.noreply.github.com"
+                      "GIT_COMMITTER_NAME",  "fsforge"
+                      "GIT_COMMITTER_EMAIL", "fsforge@users.noreply.github.com" ]
                 let! commitResult = runProcess "git" ["commit"; "-m"; message] identityEnv worktreeDir
                 match commitResult with
                 | Ok _    -> return Ok ()
