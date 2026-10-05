@@ -115,6 +115,17 @@ let commitAll (worktreeDir: string) (message: string) : Async<Result<unit, strin
                 | Error e -> return Error $"git commit failed: {e}"
     }
 
+/// Move (rename) a file or folder within the worktree using `git mv`, so the
+/// move is staged. Paths are relative to `worktreeDir`. Fails if the source is
+/// untracked or missing, or if the destination already exists.
+let moveFile (worktreeDir: string) (source: string) (destination: string) : Async<Result<unit, string>> =
+    async {
+        let! result = runProcess "git" ["mv"; source; destination] [] worktreeDir
+        match result with
+        | Ok _    -> return Ok ()
+        | Error e -> return Error $"git mv failed: {e}"
+    }
+
 /// Push the worktree's current HEAD to `remoteBranch` on `remoteName`,
 /// force-pushing unconditionally. The branch is assumed to be owned by the
 /// caller and every run starts from a fresh clone with no local remote-tracking ref for it, so

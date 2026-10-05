@@ -8,6 +8,7 @@ Git primitives implemented by shelling out to `git`. None depend on a specific f
 | [`getDefaultBranch`](#getdefaultbranch) | `basePath -> Async<Result<string, string>>` | Branch name |
 | [`getWorktree`](#getworktree) | `basePath -> worktreePath -> branchSlug -> Async<Result<string, string>>` | `worktreePath` |
 | [`commitAll`](#commitall) | `worktreeDir -> message -> Async<Result<unit, string>>` | — |
+| [`moveFile`](#movefile) | `worktreeDir -> source -> destination -> Async<Result<unit, string>>` | — |
 | [`pushBranch`](#pushbranch) | `GitAuth -> remoteName -> worktreeDir -> remoteBranch -> Async<Result<unit, string>>` | — |
 | [`addRemote`](#addremote) | `worktreeDir -> remoteName -> url -> Async<Result<unit, string>>` | — |
 | [`lsRemoteHeads`](#lsremoteheads) | `GitAuth -> url -> branch -> Async<Result<bool, string>>` | Whether the branch exists |
@@ -36,6 +37,12 @@ Runs `git add -A` and commits in `worktreeDir`. Uses a fallback identity (`fsfor
 `fsforge@users.noreply.github.com`) via environment so it works on CI runners with no git config.
 Returns `Error "no-diff"` when there is nothing to commit — callers can match on this string to treat
 it as a non-failure.
+
+## moveFile
+
+Runs `git mv <source> <destination>` in `worktreeDir`, moving a file or folder and staging the move.
+Paths are relative to `worktreeDir`. Fails if the source is missing or untracked, or if the destination
+already exists.
 
 ## pushBranch
 

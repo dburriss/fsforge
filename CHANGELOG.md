@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `GitOps.moveFile`: move a file or folder within a worktree using `git mv`.
 - Initial release: remote-agnostic git operations (`GitOps`) parameterised by `GitAuth`, the `IForgeClient` abstraction, and a GitHub implementation (`GhForgeClient`) built on the `gh` CLI.
 
 ### Fixed
