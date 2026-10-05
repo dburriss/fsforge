@@ -8,7 +8,7 @@
     <PackageId>FsForge</PackageId>
     <Title>FsForge</Title>
     <Description>Provider-agnostic git and pull request write-back for F#: clone, worktree, commit, push and fork mechanics behind a pluggable auth abstraction, with a GitHub (gh CLI) forge client.</Description>
-    <Version>0.0.1-beta1</Version>
+    <Version>0.0.1</Version>
     <Authors>Devon Burriss</Authors>
     <Copyright>Copyright © 2026 Devon Burriss</Copyright>
     <PackageProjectUrl>https://github.com/dburriss/fsforge</PackageProjectUrl>
@@ -17,7 +17,8 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageTags>fsharp git github pull-request forge</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageReleaseNotes>Initial release: remote-agnostic git operations (`GitOps`) parameterised by `GitAuth`, the `IForgeClient` abstraction, and a GitHub implementation (`GhForgeClient`) built on the `gh` CLI.
+    <PackageReleaseNotes>`GitOps.moveFile`: move a file or folder within a worktree using `git mv`.
+Initial release: remote-agnostic git operations (`GitOps`) parameterised by `GitAuth`, the `IForgeClient` abstraction, and a GitHub implementation (`GhForgeClient`) built on the `gh` CLI.
 Resolved nullness warnings: a failed process start or an undeterminable clone parent directory now produces a clear error instead of a null dereference.</PackageReleaseNotes>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
