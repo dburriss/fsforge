@@ -162,6 +162,62 @@ let ``lsRemoteHeads returns false when the branch does not exist on the remote``
         try Directory.Delete(seedDir, true) with _ -> ()
 
 // ---------------------------------------------------------------------------
+// moveFile — git mv for a file or folder, staged in the worktree
+// ---------------------------------------------------------------------------
+
+/// Creates a repo with one commit containing a.txt and dir/b.txt, runs `body`, then deletes it.
+let private withMoveRepo (body: string -> unit) =
+    let dir = Path.Combine(Path.GetTempPath(), $"forge-mv-{System.Guid.NewGuid():N}")
+    try
+        Directory.CreateDirectory(Path.Combine(dir, "dir")) |> ignore
+        Assert.True(run "git" ["-c"; "init.defaultBranch=main"; "init"; dir] (Path.GetTempPath()), "git init")
+        File.WriteAllText(Path.Combine(dir, "a.txt"), "a")
+        File.WriteAllText(Path.Combine(dir, "dir", "b.txt"), "b")
+        Assert.True(run "git" ["add"; "-A"] dir, "git add")
+        Assert.True(run "git" ["-c"; "user.email=t@t.com"; "-c"; "user.name=t"; "commit"; "-m"; "init"] dir, "git commit")
+        body dir
+    finally
+        try Directory.Delete(dir, true) with _ -> ()
+
+let private stagedRenames (dir: string) =
+    let psi = ProcessStartInfo("git")
+    psi.WorkingDirectory       <- dir
+    psi.RedirectStandardOutput <- true
+    psi.UseShellExecute        <- false
+    for a in ["status"; "--porcelain"] do psi.ArgumentList.Add(a)
+    use p = Process.Start(psi) |> Option.ofObj |> Option.get
+    let out = p.StandardOutput.ReadToEnd()
+    p.WaitForExit()
+    out
+
+[<Fact>]
+let ``moveFile moves a tracked file and stages the rename`` () =
+    withMoveRepo (fun dir ->
+        let result = moveFile dir "a.txt" "renamed.txt" |> Async.RunSynchronously
+
+        Assert.Equal(Ok (), result)
+        Assert.False(File.Exists(Path.Combine(dir, "a.txt")))
+        Assert.True(File.Exists(Path.Combine(dir, "renamed.txt")))
+        Assert.Contains("R  a.txt -> renamed.txt", stagedRenames dir))
+
+[<Fact>]
+let ``moveFile moves a tracked folder`` () =
+    withMoveRepo (fun dir ->
+        let result = moveFile dir "dir" "moved" |> Async.RunSynchronously
+
+        Assert.Equal(Ok (), result)
+        Assert.False(Directory.Exists(Path.Combine(dir, "dir")))
+        Assert.True(File.Exists(Path.Combine(dir, "moved", "b.txt")))
+        Assert.Contains("R  dir/b.txt -> moved/b.txt", stagedRenames dir))
+
+[<Fact>]
+let ``moveFile returns Error when the source does not exist`` () =
+    withMoveRepo (fun dir ->
+        match moveFile dir "missing.txt" "x.txt" |> Async.RunSynchronously with
+        | Error e -> Assert.Contains("git mv failed", e)
+        | Ok ()   -> Assert.Fail "expected Error for a missing source")
+
+// ---------------------------------------------------------------------------
 // cleanupAll — failures must be surfaced, not swallowed
 // ---------------------------------------------------------------------------
 

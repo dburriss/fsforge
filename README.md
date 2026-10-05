@@ -34,7 +34,7 @@ Requires `git` (and `gh` when using the GitHub client) on `PATH`. Targets `net10
   touch a remote; passed to git as `-c credential.helper=<helperCommand>` with `env` set on the child
   process only.
 - **`GitOps`** — remote-agnostic git primitives: `ensureClone`, `getDefaultBranch`, `getWorktree`,
-  `commitAll`, `pushBranch`, `addRemote`, `lsRemoteHeads`, `cleanupWorktree`, `cleanupAll`.
+  `commitAll`, `moveFile`, `pushBranch`, `addRemote`, `lsRemoteHeads`, `cleanupWorktree`, `cleanupAll`.
 - **`IForgeClient`** — the forge-specific operations that are not plain git: `Fork`,
   `CurrentUserLogin`, `CreatePullRequest`.
 - **`Forge.GitHub`** — `githubAuth token` and `GhForgeClient(token)`, an `IForgeClient` using `gh`.
